@@ -72,11 +72,11 @@ class ReceptiveField(object):
         # else:
         #     self._thresh_count += 1
 
-        # if num_fired > cfg.MAX_NUERONS_PER_EXCITATION:
+        # if num_fired > cfg.MAX_NEURONS_PER_EXCITATION:
         #     print 'Reducing threshold:', self.threshold
         #     self.threshold -= .1
         #     self.adjust_threshold()
-        # elif num_fired < cfg.MIN_NUERONS_PER_EXCITATION:
+        # elif num_fired < cfg.MIN_NEURONS_PER_EXCITATION:
         #     print 'Increasing threshold:', self.threshold
         #     self.threshold += .1
         #     self.adjust_threshold()
