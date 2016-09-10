@@ -2,8 +2,8 @@ import math
 import numpy as np
 from sklearn.feature_extraction import image
 import matplotlib
-import matplotlib.pyplot as plt
 matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 
 def patches_3d_to_2d(patches):
