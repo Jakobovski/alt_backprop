@@ -1,7 +1,9 @@
 import math
 import numpy as np
 from sklearn.feature_extraction import image
+import matplotlib
 import matplotlib.pyplot as plt
+matplotlib.use('TkAgg')
 
 
 def patches_3d_to_2d(patches):
@@ -11,7 +13,6 @@ def patches_3d_to_2d(patches):
 
 def extract_patches(images, patch_shape, unique=True):
     x, y = patch_shape
-    # Array of patches
     all_patches = np.ndarray(shape=(0, x * y), dtype=float, order='F')
 
     for img in images:
@@ -31,9 +32,7 @@ def extract_patches(images, patch_shape, unique=True):
 
 def show_patches(images):
     """Accepts a a list of arrays that are images and displays them"""
-    import matplotlib.pyplot as plt
     for img in images:
-        print img
         d = int(len(img)**.5)
         img = img.reshape(d, d)
         plt.figure()
@@ -57,5 +56,11 @@ def show_receptive_field(rec_field):
     fig = plt.figure()
     plt.imshow(large_image, cmap='Greys_r', interpolation='none')
     plt.show(block=False)
-    fig.canvas.manager.window.attributes('-topmost', 1)
+
+    # Make the window on top
+    if matplotlib.get_backend() == 'TkAgg':
+        fig.canvas.manager.window.attributes('-topmost', 1)
+    else:
+        fig.window.raise_()
+
     input('Press ENTER to exit')
