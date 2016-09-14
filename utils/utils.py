@@ -42,14 +42,12 @@ def show_patches(images):
 
 def show_receptive_field(rec_field):
     """Displays an image of a receptive field"""
-    dneuron = math.sqrt(rec_field.neuron_size)
-    d = int(math.sqrt(rec_field.num_neurons)) * dneuron
+    dneuron = rec_field.neuron_shape[0]
+    d = int(math.sqrt(rec_field.num_neurons)) * rec_field.neuron_shape[0]
     large_image = np.ones((d, d))
 
     for pos, cneuron in rec_field.neurons.iteritems():
         img = cneuron.weights
-        d = len(img)**.5
-        img = img.reshape(d, d)
         offset = [pos[0] * dneuron, pos[1] * dneuron]
         large_image[offset[0]:offset[0] + dneuron, offset[1]:offset[1] + dneuron] = img
 
@@ -62,5 +60,3 @@ def show_receptive_field(rec_field):
         fig.canvas.manager.window.attributes('-topmost', 1)
     else:
         fig.window.raise_()
-
-    input('Press ENTER to exit')

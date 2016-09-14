@@ -12,11 +12,14 @@ class ReceptiveField(object):
         compete with each other to learn representations.
         """
         self.num_neurons = num_neurons
-        self.neuron_size = neuron_size
 
         # The neurons need to be a square
         self.side_len = int(math.sqrt(num_neurons))
         assert math.sqrt(self.num_neurons) % 1 == 0
+        self.shape = (self.side_len, self.side_len)
+
+        # This is the shape of the image that is input into the receptive field
+        self.neuron_shape = (math.sqrt(neuron_size), math.sqrt(neuron_size))
 
         # Setup the dict to hold the neurons
         self.neurons = {}
@@ -25,7 +28,7 @@ class ReceptiveField(object):
         for r_idx in range(self.side_len):
             for c_idx in range(self.side_len):
                 position = (r_idx, c_idx)
-                self.neurons[position] = Neuron(position, neuron_size, self)
+                self.neurons[position] = Neuron(position, self.neuron_shape, self)
 
     def accept_input(self, signal, learn):
         for pos, conv_neuron in self.neurons.iteritems():

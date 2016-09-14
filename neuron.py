@@ -4,10 +4,10 @@ import numpy as np
 
 class Neuron(object):
 
-    def __init__(self, position, size, layer):
+    def __init__(self, position, shape, layer):
         self.position = position
-        self.size = size
-        self.weights = np.random.uniform(0, 1.0, size)
+        self.shape = shape
+        self.weights = np.random.uniform(0, 1.0, shape)
         self.layer = layer
 
         # A dictionary to cache results form get_neighbor_cords()
@@ -16,7 +16,6 @@ class Neuron(object):
     def get_excitation(self, image):
         self.excitation = (1 / np.linalg.norm(self.weights - image))
         return self.excitation
-
 
     def move_towards(self, image, learning_rate):
         """ Makes the filters weights move toward the passed image"""
