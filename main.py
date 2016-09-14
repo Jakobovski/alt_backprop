@@ -7,7 +7,7 @@ import config
 
 if __name__ == '__main__':
     # Number of images to sample from
-    SAMPLE_IMAGES = 500
+    SAMPLE_IMAGES = 40
 
     rec_field = ReceptiveField(121, 36)
     mnist = input_data.read_data_sets('MNIST_data')
@@ -16,7 +16,7 @@ if __name__ == '__main__':
     patches = utils.extract_patches(images, (6, 6))
 
     for idx, patch in enumerate(patches):
-        rec_field.learn(patch)
+        rec_field.accept_input(patch, learn=True)
 
         if idx % 100 == 0:
             print 'Percent:', idx * 100 / len(patches), 'LR:', config.LEARNING_RATE
@@ -24,3 +24,9 @@ if __name__ == '__main__':
 
     # Display the results
     utils.show_receptive_field(rec_field)
+
+
+
+
+# Create a layer object
+

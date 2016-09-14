@@ -2,7 +2,7 @@ from __future__ import division
 import numpy as np
 
 
-class ConvFilter(object):
+class Neuron(object):
 
     def __init__(self, position, size, layer):
         self.position = position
@@ -10,24 +10,13 @@ class ConvFilter(object):
         self.weights = np.random.uniform(0, 1.0, size)
         self.layer = layer
 
-        # Pre and post inhibition excitation
-        self.pre_inhib_excitation = 0
-        self.post_inhib_excitation = 0
-
         # A dictionary to cache results form get_neighbor_cords()
         self._cache = {}
 
-    def get_pre_inhib_excitation(self, image):
-        self.pre_inhib_excitation = (1 / np.linalg.norm(self.weights - image))
-        return self.pre_inhib_excitation
+    def get_excitation(self, image):
+        self.excitation = (1 / np.linalg.norm(self.weights - image))
+        return self.excitation
 
-    def get_post_inhib_excitation(self):
-        self.post_inhib_excitation = self.pre_inhib_excitation + self.last_inhibition + self.layer.threshold
-        # self.reset_inhibition()
-        return self.post_inhib_excitation
-
-    def reset_inhibition(self):
-        self.last_inhibition = 0
 
     def move_towards(self, image, learning_rate):
         """ Makes the filters weights move toward the passed image"""
@@ -67,8 +56,3 @@ class ConvFilter(object):
 
         self._cache[(nmin, nmax)] = neighbors
         return neighbors
-
-    def inhibit(self, amount):
-        """Inhibits this filter in proportion to the amount"""
-        assert amount >= 0
-        self.last_inhibition += amount
