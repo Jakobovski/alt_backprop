@@ -1,5 +1,9 @@
 ## TODO
 
+New naming scheme
+- receptive field
+- filter => neuron
+
 == Map growth ==
 Maybe allow the maps to grows? 
 

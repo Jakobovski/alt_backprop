@@ -9,13 +9,13 @@ from alt_backprop.layer import Layer
 
 if __name__ == '__main__':
     # Number of images to sample from
-    SAMPLE_IMAGES = 1000
+    SAMPLE_IMAGES = 400
     mnist = input_data.read_data_sets('MNIST_data')
     images, labels = mnist.train.next_batch(SAMPLE_IMAGES)
 
     # Initialize layer 1
     l1_rec_field = ReceptiveField(121, 36)
-    layer_1 = Layer(l1_rec_field)
+    layer_1 = Layer(l1_rec_field, (11, 11))
 
     for idx, image in enumerate(images):
         image = image.reshape(28, 28)
@@ -23,8 +23,8 @@ if __name__ == '__main__':
 
         if idx % 10 == 0:
             print 'Percent:', idx * 100 / len(images), 'LR:', config.LEARNING_RATE
-            config.LEARNING_RATE *= .99
+            config.LEARNING_RATE *= .999
 
     # Display the results
-    utils.show_receptive_field(l1_rec_field)
+    layer_1.visualize()
     input('Press ENTER to exit')

@@ -2,7 +2,7 @@ from __future__ import division
 import numpy as np
 
 
-class Neuron(object):
+class Filter(object):
 
     def __init__(self, position, shape, layer):
         self.position = position

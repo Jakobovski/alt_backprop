@@ -12,31 +12,27 @@ if __name__ == '__main__':
     SAMPLE_IMAGES = 40
     mnist = input_data.read_data_sets('MNIST_data')
     images, labels = mnist.train.next_batch(SAMPLE_IMAGES)
-    patches = utils.extract_patches(images, (6, 6))
 
     # Initialize layer 1
     l1_rec_field = ReceptiveField(121, 36)
-    layer_1 = Layer(l1_rec_field)
+    layer_1 = Layer(l1_rec_field, (11, 11))
 
     # Initialize layer 2
     l2_rec_field = ReceptiveField(121, 9)
-    layer_2 = Layer(l2_rec_field)
+    layer_2 = Layer(l2_rec_field, ())
 
+    layer_1.layer_above = layer_2
+    layer_2.layer_below = layer_1
 
+    for idx, image in enumerate(images):
+        image = image.reshape(28, 28)
+        layer_1.accept_input(image, learn=True)
 
-
-    for idx, patch in enumerate(patches):
-        layer_1.accept_input(patch, learn=True)
-
-        if idx % 100 == 0:
-            print 'Percent:', idx * 100 / len(patches), 'LR:', config.LEARNING_RATE
+        if idx % 10 == 0:
+            print 'Percent:', idx * 100 / len(images), 'LR:', config.LEARNING_RATE
             config.LEARNING_RATE *= .999
 
     # Display the results
     utils.show_receptive_field(l1_rec_field)
     utils.show_receptive_field(l2_rec_field)
     input('Press ENTER to exit')
-
-
-
-

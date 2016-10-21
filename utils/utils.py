@@ -1,4 +1,3 @@
-import math
 import numpy as np
 from sklearn.feature_extraction import image
 import matplotlib
@@ -18,7 +17,7 @@ def extract_patches(images, patch_shape, unique=True):
     for img in images:
         img = img.reshape(28, 28)
 
-        # Add a row and column to the img to make it 30x30 so we can reconstruct it better using 6x6 or 5x5 neurons
+        # Add a row and column to the img to make it 30x30 so we can reconstruct it better using 6x6 or 5x5 filters
         col = np.zeros((28, 2), dtype=float)
         img = np.append(img, col, axis=1)
         row = np.zeros((2, 30), dtype=float)
@@ -40,23 +39,23 @@ def show_patches(images):
     plt.show()
 
 
-def show_receptive_field(rec_field):
-    """Displays an image of a receptive field"""
-    dneuron = rec_field.neuron_shape[0]
-    d = int(math.sqrt(rec_field.num_neurons)) * rec_field.neuron_shape[0]
-    large_image = np.ones((d, d))
+# def show_receptive_field(rec_field):
+#     """Displays an image of a receptive field"""
+#     dfilter = rec_field.filter_shape[0]
+#     d = int(math.sqrt(rec_field.num_filters)) * rec_field.filter_shape[0]
+#     large_image = np.ones((d, d))
 
-    for pos, cneuron in rec_field.neurons.iteritems():
-        img = cneuron.weights
-        offset = [pos[0] * dneuron, pos[1] * dneuron]
-        large_image[offset[0]:offset[0] + dneuron, offset[1]:offset[1] + dneuron] = img
+#     for pos, cfilter in rec_field.filters.iteritems():
+#         img = cfilter.weights
+#         offset = [pos[0] * dfilter, pos[1] * dfilter]
+#         large_image[offset[0]:offset[0] + dfilter, offset[1]:offset[1] + dfilter] = img
 
-    fig = plt.figure()
-    plt.imshow(large_image, cmap='Greys_r', interpolation='none')
-    plt.show(block=False)
+#     fig = plt.figure()
+#     plt.imshow(large_image, cmap='Greys_r', interpolation='none')
+#     plt.show(block=False)
 
-    # Make the window on top
-    if matplotlib.get_backend() == 'TkAgg':
-        fig.canvas.manager.window.attributes('-topmost', 1)
-    else:
-        fig.window.raise_()
+#     # Make the window on top
+#     if matplotlib.get_backend() == 'TkAgg':
+#         fig.canvas.manager.window.attributes('-topmost', 1)
+#     else:
+#         fig.window.raise_()
