@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import scipy.ndimage as ndimage
+# import scipy.ndimage as ndimage
 
 
 def frac_eq_to(image, value=0):
@@ -87,38 +87,31 @@ def extract_patches(image, patchshape, overlap_allowed=0.5, cropvalue=None,
 def plot_patches(patches, fignum=None, low=0, high=0):
     """
     Given a stack of 2D patches indexed by the first dimension, plot the
-    patches in subplots. 
+    patches in subplots.
 
     'low' and 'high' are optional arguments to control which patches
     actually get plotted. 'fignum' chooses the figure to plot in.
     """
     import matplotlib
     import matplotlib.pyplot as plt
-
-    try:
-        istate = plt.isinteractive()
-        plt.ioff()
-        if fignum is None:
-            fig = plt.gcf()
-        else:
-            fig = plt.figure(fignum)
-        if high == 0:
-            high = len(patches)
-        pmin, pmax = patches.min(), patches.max()
-        dims = np.ceil(np.sqrt(high - low))
-        for idx in xrange(high - low):
-            spl = plt.subplot(dims, dims, idx + 1)
-            ax = plt.axis('off')
-            im = plt.imshow(patches[idx], cmap=matplotlib.cm.gray)
-            cl = plt.clim(pmin, pmax)
-        plt.show()
-    finally:
-        plt.interactive(istate)
+    plt.ion()
+    plt.figure(fignum)
+    if high == 0:
+        high = len(patches)
+    pmin, pmax = patches.min(), patches.max()
+    dims = np.ceil(np.sqrt(high - low))
+    for idx in xrange(high - low):
+        plt.subplot(dims, dims, idx + 1)
+        plt.axis('off')
+        plt.imshow(patches[idx], cmap=matplotlib.cm.gray)
+        plt.clim(pmin, pmax)
+    plt.show()
+    plt.pause(0.001)
 
 
-def filter_patches(patches, min_mean=0.0, min_std=0.0):
+def neuron_patches(patches, min_mean=0.0, min_std=0.0):
     """
-    Filter patches by some criterion on their mean and variance.
+    neuron patches by some criterion on their mean and variance.
 
     Takes patches, a 3-dimensional stack of image patches (where
     the first dimension indexes the patch), and a minimum
@@ -141,11 +134,11 @@ def extract_patches_from_dir(directory, patchsize,
     Extract patches from an entire directory of images.
 
     If `smoothing` is not None, it is used as the standard deviation of a
-    Gaussian filter applied to the image before extracting patches.
+    Gaussian neuron applied to the image before extracting patches.
 
     `patchsize`, `overlap_allowed`, `cropvalue` and `crop_fraction_allowed`
     are passed along to `extract_patches()`. `min_mean` and `min_std` are
-    passed along to `filter_patches()`.
+    passed along to `neuron_patches()`.
     """
     import matplotlib
     import matplotlib.pyplot as plt
@@ -157,13 +150,13 @@ def extract_patches_from_dir(directory, patchsize,
             assert outname not in output
             image = plt.imread(os.path.join(directory, fname))
             if smoothing is not None:
-                image = ndimage.gaussian_filter(image, smoothing)
+                image = ndimage.gaussian_neuron(image, smoothing)
             # Extract patches from the image.
             output[outname] = extract_patches(image, patchsize,
                                               overlap_allowed,
                                               cropvalue, crop_fraction_allowed)
 
-            # Filter the patches that don't meet our standards.
-            output[outname] = filter_patches(output[outname], min_std=min_std,
+            # neuron the patches that don't meet our standards.
+            output[outname] = neuron_patches(output[outname], min_std=min_std,
                                              min_mean=min_mean)
     return output
