@@ -1,21 +1,29 @@
 from __future__ import division
 import tensorflow.examples.tutorials.mnist.input_data as input_data
-import alt_backprop.config as config
-from alt_backprop.models.layer import Layer
-from alt_backprop.utils.patches import plot_patches
 import numpy as np
 from skimage.util.shape import view_as_blocks
 import skimage
 
+import alt_backprop.config as config
+from alt_backprop.models.receptive_field_1d import ReceptiveField1D
+from alt_backprop.models.receptive_field_2d import ReceptiveField2D
+
+from alt_backprop.models.layer import Layer
+from alt_backprop.utils.patches import plot_patches
+
 if __name__ == '__main__':
-    # # Number of images to sample from
-    SAMPLE_IMAGES = 2000
-    mnist = input_data.read_data_sets('MNIST_data')
-    images, labels = mnist.train.next_batch(SAMPLE_IMAGES)
-
     # Initialize layer 1
-    layer_1 = Layer((28, 28), 11**2, (4, 4))
+    l1_rec_field = ReceptiveField1D(144, (4,4))
+    layer_1 = Layer(l1_rec_field, (28, 28))
 
+
+    # =========== Prepare data ===========
+    TRAINING_SAMPLE_SIZE = 300
+    mnist = input_data.read_data_sets('MNIST_data')
+    images, labels = mnist.train.next_batch(TRAINING_SAMPLE_SIZE)
+
+
+    # =========== Start training ===========
     for idx, image in enumerate(images):
         image = image.reshape(28, 28)
         layer_1.accept_input(image, learn=True)
@@ -25,14 +33,11 @@ if __name__ == '__main__':
             config.LEARNING_RATE *= .995
 
 
-    import pickle
-    output = open('layer_1_4x4', 'wb')
-    pickle.dump(layer_1, output)
-    output.close()
-
     # # Display the results
     layer_1.visualize()
     input('Press ENTER to exit')
+
+
 
     # ============================
     # Recreate original from neuron weights (Generative mode)

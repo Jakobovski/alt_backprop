@@ -9,10 +9,13 @@ import alt_backprop.config as cfg
 matplotlib.use('TkAgg')
 
 
-class ReceptiveField(object):
+class ReceptiveField2D(object):
 
     def __init__(self, num_neurons, input_dims):
-        """A receptive field represents a small region of input space. A RF consists of many neurons, these neurons
+        """A receptive field that excepts 1D values for each input pixel. This is best used for grayscale images, color
+            images will use a 3D receptive field (rgb)
+
+        This represents a small region of input space. A RF consists of many neurons, these neurons
         compete with each other to learn representations.
 
         It can be thought of as a group of neurons.

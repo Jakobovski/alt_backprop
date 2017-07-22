@@ -6,16 +6,16 @@ from receptive_field import ReceptiveField
 
 class Layer(object):
 
-    def __init__(self, input_dims, receptive_field_neurons, receptive_field_input_dims):
+    def __init__(self, receptive_field , input_dims):
         """ A layer contains one receptive field that is slid over the input image. This is similar to a filter in a
         convolution neural network.
         """
         assert input_dims[0] == input_dims[1]
         self.input_dims = input_dims
-        self.receptive_field = ReceptiveField(receptive_field_neurons, receptive_field_input_dims)
+        self.receptive_field = receptive_field
 
-        self.layer_above = None
-        self.layer_below = None
+        self.output_layer = None
+        self.input_layer = None
 
     def accept_input(self, signal, learn=True):
         """ Takes an input and learns it, passes it to the next layer"""
@@ -42,19 +42,27 @@ class Layer(object):
             cneuron = self.receptive_field.accept_input(patch, learn=learn)
             excited_neurons.append(cneuron)
 
-        if self.layer_below:
+        if self.output_layer:
             # Now we know the neuron that was excited for each receptive field in the input image
             # Create a new 'image' where each pixel contains a 2d position value, this value corresponds to the
             # position of the excited neuron.
             positions = [cneuron.position for cneuron in excited_neurons]
             positions = np.reshape(positions, self.receptive_field.shape)
-            self.layer_below.accept_input(positions, learn=learn)
+            self.output_layer.accept_input(positions, learn=learn)
 
             # WARNING!!!!
             # TODO  Check that the reshape is working in the correct order
 
     def visualize(self, upstream=None):
-        if self.layer_above is None:
+        if self.input_layer is None:
             self.receptive_field.visualize()
-        if self.layer_below:
-            self.layer_below.visualize(self.receptive_field)
+        if self.output_layer:
+            self.output_layer.visualize(self.receptive_field)
+
+
+    def set_output_layer(layer):
+        self.output_layer = layer
+
+
+    def set_input_layer(layer):
+        self.input_layer = layer
