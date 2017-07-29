@@ -4,11 +4,11 @@ import numpy as np
 
 class Subfield(object):
 
-    def __init__(self, position, shape, layer):
+    def __init__(self, position, shape, receptive_field):
         self.position = position
         self.shape = shape
         self.weights = np.random.uniform(0, 1.0, shape)
-        self.layer = layer
+        self.receptive_field = receptive_field
 
         # A dictionary to cache results form get_neighbor_cords()
         self._cache = {}
@@ -20,19 +20,22 @@ class Subfield(object):
 
     def move_towards(self, image, learning_rate):
         """ Makes the neurons weights move toward the passed image"""
+        if image.shape != self.weights.shape:
+            raise Exception("Image shape does not match weights shape", image.shape, self.weights.shape)
         self.weights += (image - self.weights) * learning_rate
 
-    def get_neighbor_cords(self, nmin, nmax):
+    def get_neighbor_cords(self, nmin, nmax_percent):
         """
         nmin: The neighbors that are at least 1 distance from the position.
         nmax: the max distance to get neighbors, (not inclusive.).
         returns the coordinates of neighbors that are at least `min` distance, but less than `max` distance.
         """
+        nmax = int(nmax_percent * self.receptive_field.side_len)
         neighbors = self._cache.get((nmin, nmax), None)
 
         if not neighbors:
             # print 'Not using cache. (First time neuron fired)'
-            side_length = self.layer.side_len
+            side_length = self.receptive_field.side_len
             i, j = self.position
             neighbors = []
 

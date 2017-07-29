@@ -85,7 +85,7 @@ class ReceptiveField2D(object):
         max_subfield.move_towards(signal, cfg.LEARNING_RATE)  # TODO. We might have double learning here.. Thats probably OK
 
         # Find the neighbors of the recently fired subfields and make them learn a bit
-        for neighbor in max_subfield.get_neighbor_cords(1, cfg.POS_NEIGHBOR_MAX):
+        for neighbor in max_subfield.get_neighbor_cords(1, cfg.POS_NEIGHBOR_MAX_PERCENT):
             dx = abs(max_subfield.position[0] - neighbor[0])
             dy = abs(max_subfield.position[1] - neighbor[1])
             learning_rate = cfg.NEIGHBOR_LEARNING_RATE / max(dy, dx)**2
@@ -121,7 +121,6 @@ class ReceptiveField2D(object):
             large_image = np.zeros((d, d))
 
             for pos, subfield in self.subfields.iteritems():
-                print "pos:", pos
                 sub_field_image = np.zeros((subfield_len, subfield_len))
                 for x_idx in range(self.input_shape[0]):
                     for y_idx in range(self.input_shape[0]):

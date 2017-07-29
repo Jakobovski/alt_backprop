@@ -13,7 +13,7 @@ def stitch_images(input_list):
     assert  len(input_list) % num_sub_images_per_side == 0
     sub_img_side_len  = input_list[0].shape[0]
     lrg_img_side = num_sub_images_per_side * sub_img_side_len
-    lrg_image = np.ones((lrg_img_side,lrg_img_side))
+    lrg_image = np.zeros((lrg_img_side,lrg_img_side))
 
     print input_list[0]
     print input_list[-1]
@@ -76,7 +76,7 @@ def show_patches(images):
 #     """Displays an image of a receptive field"""
 #     dneuron = rec_field.neuron_shape[0]
 #     d = int(math.sqrt(rec_field.num_neurons)) * rec_field.neuron_shape[0]
-#     large_image = np.ones((d, d))
+#     large_image = np.zeros((d, d))
 
 #     for pos, cneuron in rec_field.neurons.iteritems():
 #         img = cneuron.weights

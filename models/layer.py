@@ -8,7 +8,7 @@ import alt_backprop.config as config
 
 
 class Layer(object):
-    def __init__(self, receptive_field, input_dims):
+    def __init__(self, receptive_field, input_dims, name=None):
         """ A layer contains one receptive field that is slid over the input image. This is similar to a filter in a
         convolution neural network.
         """
@@ -18,6 +18,10 @@ class Layer(object):
 
         self.output_layer = None
         self.input_layer = None
+        self.name = name
+
+    def set_learning_rate(self, rate):
+        self.receptive_field.set_learning_rate(rate)
 
     def accept_input(self, input_image, learn=True):
         """ Takes an input and learns it, passes it to the next layer"""
@@ -52,12 +56,12 @@ class Layer(object):
         if hasattr(input_image[0][0], '__iter__'):  # TODO remove once all images are 3d
             npad.append((0, 0))
 
-        padded_image = np.pad(input_image, pad_width=npad, mode='constant', constant_values=0)
+        pad_value = (0,0)
+        if len(input_image.shape) > 2:
+            if input_image.shape[2] != len(pad_value):
+                raise Exception('Padding with the wrong value')
 
-        # Split the input up into patches
-        # patches = view_as_blocks(padded_image, self.receptive_field.input_shape)
-        # is the order correct?
-        # patches = patches.reshape(-1, self.receptive_field.input_shape[0], self.receptive_field.input_shape[0])
+        padded_image = np.pad(input_image, pad_width=npad, mode='constant', constant_values=pad_value)
 
         # Split the input up into patches
         patches = patch_util.extract_patches(padded_image, self.receptive_field.input_shape)

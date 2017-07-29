@@ -56,7 +56,7 @@ if __name__ == '__main__':
     #     image = skimage.util.pad(image, [padding_needed, padding_needed], 'minimum')
     #     patches = patch_util.extract_patches(image, (4,4))
     #
-    #     recreation_patches = np.ones(patches.shape)
+    #     recreation_patches = np.zeros(patches.shape)
     #     for idx, patch in enumerate(patches):
     #         cneuron = layer_1.receptive_field.accept_input(patch, learn=False)
     #         recreation_patches[idx] = cneuron.weights

@@ -1,10 +1,5 @@
 ## TODO
 
-Check:
-- learn function
-- check get_neighbor_cords
-move_towards
-
 WARNING !! there are a few places in the code that need to be checked if they are working as expected. do search for todo
 
 

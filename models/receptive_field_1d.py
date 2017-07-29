@@ -74,17 +74,17 @@ class ReceptiveField1D(object):
         max_subfield.move_towards(input_image, cfg.LEARNING_RATE)  # TODO. We might have double learning here.. Thats probably OK
 
         # Find the neighbors of the recently fired subfields and make them learn a bit
-        for neighbor in max_subfield.get_neighbor_cords(1, cfg.POS_NEIGHBOR_MAX):
+        for neighbor in max_subfield.get_neighbor_cords(1, cfg.POS_NEIGHBOR_MAX_PERCENT):
             dx = abs(max_subfield.position[0] - neighbor[0])
             dy = abs(max_subfield.position[1] - neighbor[1])
-            learning_rate = cfg.NEIGHBOR_LEARNING_RATE / max(dy, dx)**2
+            learning_rate = cfg.NEIGHBOR_LEARNING_RATE / math.sqrt(dy**2 + dx**2)
             self.subfields[neighbor].move_towards(input_image, learning_rate=learning_rate)
 
     def visualize(self):
         """Displays an image of a receptive field"""
         dsubfield = self.input_shape[0]
         d = self.side_len * self.input_shape[0]
-        large_image = np.ones((d, d))
+        large_image = np.zeros((d, d))
 
         for pos, csubfield in self.subfields.iteritems():
             img = csubfield.weights

@@ -36,7 +36,7 @@ def extract_patches(image, desired_shape):
             end_y = (y_idx+1) * ds[1]
 
             if len(desired_shape) == 3:
-                patches.append(image[start_x:end_x, start_y:end_y, 0:-1])
+                patches.append(image[start_x:end_x, start_y:end_y, 0:ds[-1]])
             else:
                 patches.append(image[start_x:end_x, start_y:end_y])
 
