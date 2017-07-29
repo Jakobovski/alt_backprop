@@ -1,5 +1,31 @@
 ## TODO
 
+Check:
+- learn function
+- check get_neighbor_cords
+move_towards
+
+WARNING !! there are a few places in the code that need to be checked if they are working as expected. do search for todo
+
+
+
+
+branching
+
+
+
+Fix naming
+ - Receptive field
+ - sub-field
+ - neuron (elements of sub field)?
+
+
+
+
+Make images (n,n,1) instead of (n,n)
+
+performance check
+
 MNIST Setup
 0: Input 28x28  (784)
 1. 4x4 span, with 12x12 capacity (outputs a 7x7x2 representations)  (98 total)

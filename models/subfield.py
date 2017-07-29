@@ -2,7 +2,7 @@ from __future__ import division
 import numpy as np
 
 
-class Neuron(object):
+class Subfield(object):
 
     def __init__(self, position, shape, layer):
         self.position = position
@@ -12,6 +12,7 @@ class Neuron(object):
 
         # A dictionary to cache results form get_neighbor_cords()
         self._cache = {}
+        self.excitation = 0
 
     def get_excitation(self, image):
         self.excitation = (1 / np.linalg.norm(self.weights - image))
@@ -30,7 +31,7 @@ class Neuron(object):
         neighbors = self._cache.get((nmin, nmax), None)
 
         if not neighbors:
-            print 'Not using cache'
+            # print 'Not using cache. (First time neuron fired)'
             side_length = self.layer.side_len
             i, j = self.position
             neighbors = []

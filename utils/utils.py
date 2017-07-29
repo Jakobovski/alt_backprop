@@ -1,8 +1,35 @@
+import math
 import numpy as np
-from sklearn.feature_extraction import image
+# from sklearn.feature_extraction import image
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+
+
+def stitch_images(input_list):
+    """Takes a list/matrix of 2D patches and makes one big 2d image from them"""
+    num_sub_images_per_side = int(math.sqrt(len(input_list)))
+    print len(input_list), num_sub_images_per_side
+    assert  len(input_list) % num_sub_images_per_side == 0
+    sub_img_side_len  = input_list[0].shape[0]
+    lrg_img_side = num_sub_images_per_side * sub_img_side_len
+    lrg_image = np.ones((lrg_img_side,lrg_img_side))
+
+    print input_list[0]
+    print input_list[-1]
+
+    # A lookup map
+    lmap = np.reshape(range(len(input_list)), (num_sub_images_per_side, num_sub_images_per_side))
+
+    for idx, subimg in enumerate(input_list):
+        pos = np.where(lmap == idx)
+        start_x = pos[0] * subimg.shape[0]
+        start_y = pos[1] * subimg.shape[0]
+        end_x = (pos[0] + 1) * subimg.shape[0]
+        end_y = (pos[1] + 1) * subimg.shape[0]
+        lrg_image[start_x:end_x, start_y:end_y] = subimg
+
+    return lrg_image
 
 
 def patches_3d_to_2d(patches):
@@ -27,6 +54,12 @@ def extract_patches(images, patch_shape, unique=True):
         all_patches = np.append(all_patches, patches, axis=0)
 
     return all_patches
+
+
+def plot_image(image):
+    plt.figure()
+    plt.imshow(image, cmap='Greys_r', interpolation='none')
+    plt.show(block=False)
 
 
 def show_patches(images):
